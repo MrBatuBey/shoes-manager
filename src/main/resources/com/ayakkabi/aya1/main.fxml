@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<StackPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1"
+           fx:controller="com.ayakkabi.aya1.MainController"
+           stylesheets="@styles/main-styles.css">
+
+    <VBox alignment="CENTER" prefHeight="624.0" prefWidth="874.0" spacing="15">
+        <padding>
+            <Insets bottom="25" left="25" right="25" top="25" />
+        </padding>
+
+        <VBox styleClass="main-container" VBox.vgrow="ALWAYS">
+            <Label styleClass="main-title" text="                                                          Şahika Ayakkabı Stok ve Satış Yönetimi" />
+            <Separator />
+
+            <!-- Ürün Yönetimi -->
+            <VBox spacing="10" styleClass="section-panel">
+                <padding>
+                    <Insets top="15" bottom="15" />
+                </padding>
+                <Label styleClass="section-title" text="Ürün Yönetimi" />
+                <HBox styleClass="button-group">
+                    <Button onAction="#showUrunEkleDialog" prefHeight="65.0" prefWidth="172.0" text="Ürün Ekle" />
+                    <Button onAction="#stokGoruntule" prefHeight="63.0" prefWidth="172.0" text="Stokları Görüntüle" />
+                    <Button onAction="#urunDuzenle" prefHeight="63.0" prefWidth="189.0" text="Ürünleri Düzenle" />
+                </HBox>
+            </VBox>
+
+            <Separator />
+
+            <!-- Satış Yönetimi -->
+            <VBox spacing="10" styleClass="section-panel">
+                <padding>
+                    <Insets top="15" bottom="15" />
+                </padding>
+                <Label styleClass="section-title" text="Satış Yönetimi" />
+                <HBox styleClass="button-group">
+                    <Button onAction="#satisRaporu" prefHeight="68.0" prefWidth="170.0" text="Satış Raporu" />
+                    <Button onAction="#raporGonder" prefHeight="68.0" prefWidth="180.0" text="Rapor Oluştur" />
+                    <Button onAction="#notSistemi" prefHeight="68.0" prefWidth="180.0" text="Not Sistemi" />
+                </HBox>
+                <HBox alignment="CENTER" spacing="10">
+                    <padding>
+                        <Insets top="10" />
+                    </padding>
+                    <Button onAction="#satisYap" prefHeight="45.0" prefWidth="189.0" styleClass="success-button" text="Satış Yap" />
+                </HBox>
+            </VBox>
+
+            <Region VBox.vgrow="ALWAYS" />
+        </VBox>
+
+        <Label styleClass="footer-text" text="© 2024 Şahika Ayakkabı Stok Yönetim Sistemi" />
+    </VBox>
+</StackPane>

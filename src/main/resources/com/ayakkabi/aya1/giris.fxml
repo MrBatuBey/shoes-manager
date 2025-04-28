@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+<StackPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.ayakkabi.aya1.GirisController"
+           stylesheets="@styles/styles.css" styleClass="login-background">
+
+    <VBox alignment="CENTER" spacing="20" styleClass="login-panel" maxWidth="500" maxHeight="500">
+        <padding>
+            <Insets top="40" right="40" bottom="40" left="40"/>
+        </padding>
+
+        <!-- Logo veya başlık -->
+        <ImageView fitWidth="200" fitHeight="100" preserveRatio="true">
+            <Image url="@images/giris.png"/>
+        </ImageView>
+
+        <Label text="Şahika Ayakkabı" styleClass="login-title"/>
+        <Label text="Stok ve Satış Yönetim Sistemi" styleClass="login-subtitle"/>
+
+        <Separator/>
+
+        <TextField fx:id="kullaniciAdiField" promptText="Kullanıcı Adı" prefHeight="40" prefWidth="300"/>
+        <PasswordField fx:id="sifreField" promptText="Şifre" prefHeight="40" prefWidth="300"/>
+
+        <Button text="Giriş Yap" onAction="#girisYap" styleClass="login-button" prefWidth="200" prefHeight="40"/>
+
+        <Text fx:id="hataMesaji" styleClass="error-text" fill="red" visible="false"/>
+    </VBox>
+</StackPane>

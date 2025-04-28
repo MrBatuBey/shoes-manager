@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.ayakkabi.aya1.RaporGonderController" prefWidth="450" prefHeight="300">
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+    <top>
+        <VBox spacing="10">
+            <Label text="Satış Raporu Oluştur" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+            <Separator/>
+        </VBox>
+    </top>
+    <center>
+        <VBox spacing="15">
+            <GridPane hgap="10" vgap="10">
+                <padding>
+                    <Insets top="10" right="10" bottom="10" left="10"/>
+                </padding>
+                <Label text="Rapor Tipi:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                <ComboBox fx:id="raporTipiCombo" GridPane.rowIndex="0" GridPane.columnIndex="1" maxWidth="Infinity"/>
+
+                <Label text="Dosya Formatı:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                <ComboBox fx:id="dosyaFormatCombo" GridPane.rowIndex="1" GridPane.columnIndex="1" maxWidth="Infinity"/>
+
+                <Label text="Not:" GridPane.rowIndex="2" GridPane.columnIndex="0" GridPane.valignment="TOP"/>
+                <Label text="1. Önce 'Oluştur' butonuna tıklayarak raporu oluşturun.
+2. Sonra 'E-posta Gönder' butonuna tıklayarak raporu e-posta ile gönderebilirsiniz."
+                       wrapText="true" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+            </GridPane>
+        </VBox>
+    </center>
+    <bottom>
+        <HBox spacing="10" alignment="CENTER_RIGHT">
+            <padding>
+                <Insets top="20" right="0" bottom="0" left="0"/>
+            </padding>
+            <Button fx:id="iptalButton" text="İptal" onAction="#iptal" prefWidth="100"/>
+            <Button fx:id="emailGonderButton" text="E-posta Gönder" onAction="#emailGonder" prefWidth="150" style="-fx-base: #2196F3;" disable="true"/>
+            <Button fx:id="olusturButton" text="Oluştur" onAction="#olusturRapor" prefWidth="100" style="-fx-base: #4CAF50;"/>
+        </HBox>
+    </bottom>
+</BorderPane>

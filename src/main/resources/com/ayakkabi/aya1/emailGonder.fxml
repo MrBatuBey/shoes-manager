@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.ayakkabi.aya1.EmailGonderController" prefWidth="450" prefHeight="350">
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <top>
+        <VBox spacing="10">
+            <Label text="Raporu E-posta ile Gönder" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+            <Separator/>
+        </VBox>
+    </top>
+
+    <center>
+        <VBox spacing="15">
+            <GridPane hgap="10" vgap="10">
+                <padding>
+                    <Insets top="10" right="10" bottom="10" left="10"/>
+                </padding>
+
+                <Label text="Alıcı E-posta:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                <TextField fx:id="aliciEmailField" promptText="örn: alici@example.com" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+                <Label text="Konu:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                <TextField fx:id="konuField" promptText="E-posta konusu" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+                <Label text="Mesaj:" GridPane.rowIndex="2" GridPane.columnIndex="0" GridPane.valignment="TOP"/>
+                <TextArea fx:id="mesajArea" promptText="E-posta mesajı" prefRowCount="5" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+                <Label text="Ek Dosya:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                <Label fx:id="dosyaAdiLabel" text="dosya.csv" style="-fx-font-weight: bold;" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+            </GridPane>
+        </VBox>
+    </center>
+
+    <bottom>
+        <HBox spacing="10" alignment="CENTER_RIGHT">
+            <padding>
+                <Insets top="20" right="0" bottom="0" left="0"/>
+            </padding>
+            <Button fx:id="iptalButton" text="İptal" onAction="#iptal" prefWidth="100"/>
+            <Button fx:id="gonderButton" text="Gönder" onAction="#gonderEmail" prefWidth="100" style="-fx-base: #4CAF50;"/>
+        </HBox>
+    </bottom>
+</BorderPane>

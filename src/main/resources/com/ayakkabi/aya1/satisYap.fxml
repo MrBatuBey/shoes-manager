@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.ayakkabi.aya1.SatisYapController" prefWidth="600" prefHeight="500">
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <top>
+        <VBox spacing="10">
+            <Label text="Satış İşlemi" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+            <Separator/>
+        </VBox>
+    </top>
+
+    <center>
+        <VBox spacing="15">
+            <GridPane hgap="10" vgap="10">
+                <padding>
+                    <Insets top="10" right="0" bottom="10" left="0"/>
+                </padding>
+
+                <Label text="Ürün Seçimi:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                <ComboBox fx:id="urunCombo" promptText="Ürün seçin" GridPane.rowIndex="0" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" maxWidth="Infinity"/>
+
+                <Label text="Ürün Bilgileri:" GridPane.rowIndex="1" GridPane.columnIndex="0" GridPane.valignment="TOP"/>
+                <VBox spacing="5" GridPane.rowIndex="1" GridPane.columnIndex="1">
+                    <Label fx:id="modelLabel" text="Model: " style="-fx-font-weight: bold;"/>
+                    <Label fx:id="renkLabel" text="Renk: " style="-fx-font-weight: bold;"/>
+                    <Label fx:id="fiyatLabel" text="Fiyat: " style="-fx-font-weight: bold;"/>
+                </VBox>
+
+                <Label text="Numara:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                <ComboBox fx:id="numaraCombo" promptText="Numara seçin" GridPane.rowIndex="2" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" maxWidth="Infinity"/>
+
+                <Label text="Mevcut Stok:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                <Label fx:id="stokLabel" text="0" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+                <Label text="Satış Adedi:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+                <TextField fx:id="adetField" promptText="Adet girin" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+
+                <Label text="Toplam Tutar:" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
+                <Label fx:id="tutarLabel" text="0.00 TL" style="-fx-font-weight: bold;" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+            </GridPane>
+
+            <Separator/>
+
+            <TitledPane text="Müşteri Bilgileri (Opsiyonel)" expanded="false">
+                <VBox spacing="10">
+                    <GridPane hgap="10" vgap="10">
+                        <Label text="Müşteri Adı:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                        <TextField fx:id="musteriAdiField" promptText="Müşteri adı" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+                        <Label text="Telefon:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                        <TextField fx:id="telefonField" promptText="Telefon numarası" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+                        <Label text="Not:" GridPane.rowIndex="2" GridPane.columnIndex="0" GridPane.valignment="TOP"/>
+                        <TextArea fx:id="notArea" promptText="Satış ile ilgili notlar" prefRowCount="3" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+                    </GridPane>
+                </VBox>
+            </TitledPane>
+        </VBox>
+    </center>
+
+    <bottom>
+        <HBox spacing="10" alignment="CENTER_RIGHT">
+            <padding>
+                <Insets top="20" right="0" bottom="0" left="0"/>
+            </padding>
+            <Button text="İptal" onAction="#iptal" prefWidth="100"/>
+            <Button text="Satışı Tamamla" onAction="#satisiTamamla" prefWidth="150" style="-fx-base: #4CAF50;"/>
+        </HBox>
+    </bottom>
+</BorderPane>

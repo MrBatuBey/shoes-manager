@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.ayakkabi.aya1.NotDuzenleController" prefWidth="500" prefHeight="450">
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+    <top>
+        <VBox spacing="10">
+            <Label text="Not Düzenle" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+            <Separator/>
+        </VBox>
+    </top>
+    <center>
+        <VBox spacing="15">
+            <GridPane hgap="10" vgap="10">
+                <padding>
+                    <Insets top="10" right="0" bottom="10" left="0"/>
+                </padding>
+                <Label text="Müşteri Adı:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                <TextField fx:id="musteriAdiField" promptText="Müşteri adı" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+                <Label text="Telefon:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                <TextField fx:id="telefonField" promptText="Telefon numarası" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+                <Label text="Not Tipi:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                <ComboBox fx:id="notTipiCombo" GridPane.rowIndex="2" GridPane.columnIndex="1" maxWidth="Infinity"/>
+
+                <Label text="Not İçeriği:" GridPane.rowIndex="3" GridPane.columnIndex="0" GridPane.valignment="TOP"/>
+                <TextArea fx:id="notIcerigiArea" promptText="Not içeriği" prefRowCount="5" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+                <Label text="Tutar (TL):" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+                <TextField fx:id="tutarField" promptText="0.00" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+
+                <Label text="Teslim Tarihi:" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
+                <DatePicker fx:id="teslimTarihiPicker" GridPane.rowIndex="5" GridPane.columnIndex="1" maxWidth="Infinity"/>
+
+                <Label text="Durum:" GridPane.rowIndex="6" GridPane.columnIndex="0"/>
+                <CheckBox fx:id="tamamlandiCheck" text="Tamamlandı" GridPane.rowIndex="6" GridPane.columnIndex="1"/>
+            </GridPane>
+        </VBox>
+    </center>
+    <bottom>
+        <HBox spacing="10" alignment="CENTER_RIGHT">
+            <padding>
+                <Insets top="20" right="0" bottom="0" left="0"/>
+            </padding>
+            <Button fx:id="iptalButton" text="İptal" onAction="#iptal" prefWidth="100"/>
+            <Button fx:id="kaydetButton" text="Kaydet" onAction="#notKaydet" prefWidth="100" style="-fx-base: #4CAF50;"/>
+        </HBox>
+    </bottom>
+</BorderPane>

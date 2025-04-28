@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.ayakkabi.aya1.NotSistemiController" prefWidth="800" prefHeight="600">
+    <padding>
+        <Insets top="10" right="10" bottom="10" left="10"/>
+    </padding>
+    <top>
+        <VBox spacing="10">
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Not Sistemi" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label text="Filtrele:"/>
+                <ComboBox fx:id="durumFiltre" promptText="Durum" prefWidth="120"/>
+                <ComboBox fx:id="tipFiltre" promptText="Tip" prefWidth="120"/>
+                <TextField fx:id="aramaField" promptText="Ara..." prefWidth="200"/>
+                <Button text="Ara" onAction="#aramaYap"/>
+            </HBox>
+            <Separator/>
+        </VBox>
+    </top>
+    <center>
+        <SplitPane dividerPositions="0.7" orientation="VERTICAL">
+            <TableView fx:id="notTable">
+                <columns>
+                    <TableColumn fx:id="idColumn" text="ID" prefWidth="50"/>
+                    <TableColumn fx:id="musteriColumn" text="Müşteri" prefWidth="120"/>
+                    <TableColumn fx:id="telefonColumn" text="Telefon" prefWidth="100"/>
+                    <TableColumn fx:id="tipColumn" text="Tip" prefWidth="80"/>
+                    <TableColumn fx:id="durumColumn" text="Durum" prefWidth="80"/>
+                    <TableColumn fx:id="tarihColumn" text="Oluşturma Tarihi" prefWidth="120"/>
+                    <TableColumn fx:id="teslimTarihiColumn" text="Teslim Tarihi" prefWidth="120"/>
+                    <TableColumn fx:id="tutarColumn" text="Tutar" prefWidth="80"/>
+                </columns>
+            </TableView>
+            <VBox spacing="10">
+                <padding>
+                    <Insets top="10" right="0" bottom="0" left="0"/>
+                </padding>
+                <Label text="Not İçeriği" style="-fx-font-weight: bold;"/>
+                <TextArea fx:id="notIcerikArea" VBox.vgrow="ALWAYS" editable="false"/>
+            </VBox>
+        </SplitPane>
+    </center>
+    <bottom>
+        <HBox spacing="10" alignment="CENTER_RIGHT">
+            <padding>
+                <Insets top="10" right="0" bottom="0" left="0"/>
+            </padding>
+            <Label fx:id="toplamNotLabel" text="Toplam Not: 0"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button text="Yeni Not" onAction="#yeniNotEkle" style="-fx-base: #4CAF50;"/>
+            <Button text="Düzenle" onAction="#notDuzenle"/>
+            <Button text="Durum Değiştir" onAction="#durumDegistir"/>
+            <Button text="Sil" onAction="#notSil" style="-fx-base: #F44336;"/>
+            <Button text="Kapat" onAction="#kapat"/>
+        </HBox>
+    </bottom>
+</BorderPane>
