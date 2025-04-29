@@ -30,7 +30,6 @@ public class Main extends Application {
             Scene scene = new Scene(root, width, height);
             primaryStage.setScene(scene);
 
-            // Pencereyi ekranın ortasına yerleştir
             primaryStage.setX((screenBounds.getWidth() - width) / 2);
             primaryStage.setY((screenBounds.getHeight() - height) / 2);
 
