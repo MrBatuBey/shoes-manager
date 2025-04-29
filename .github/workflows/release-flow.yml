@@ -137,8 +137,8 @@ jobs:
 
       - name: Install Launch4j (Windows)
         run: |
-          Invoke-WebRequest -Uri "https://github.com/mrbatubey/shoes-manager/raw/master/launch4j/launch4j-3.50-win32.exe" -OutFile "launch4j-setup.exe"
-            Start-Process -FilePath "launch4j-setup.exe" -ArgumentList "/S" -NoNewWindow -Wait
+          Invoke-WebRequest -Uri "https://github.com/mrbatubey/shoes-manager/raw/master/launch4j/launch4j-3.50-win32.exe" -OutFile "launch4j-setup.exe" -MaximumRedirection 5
+          Start-Process -FilePath "launch4j-setup.exe" -ArgumentList "/S" -NoNewWindow -Wait
 
       - name: Download Launch4j Config
         run: |
