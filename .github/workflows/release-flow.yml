@@ -7,7 +7,7 @@ on:
 
 jobs:
   check-version:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     outputs:
       version_changed: ${{ steps.check.outputs.changed }}
       version: ${{ steps.get_version.outputs.version }}
@@ -86,7 +86,7 @@ jobs:
           path: macos_Sahika.jar
   unix-build:
     needs: macos-build
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -161,7 +161,7 @@ jobs:
           path: windows_Sahika.exe
   release:
     needs: [ macos-build, unix-build, windows-build ]
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
