@@ -180,14 +180,22 @@ public class MainController {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setTitle("Satış Raporu");
             TableView<Satis> tableView = new TableView<>();
+
             TableColumn<Satis, Integer> idColumn = new TableColumn<>("Satış ID");
             idColumn.setCellValueFactory(new PropertyValueFactory<>("satisId"));
+
             TableColumn<Satis, String> urunColumn = new TableColumn<>("Ürün");
             urunColumn.setCellValueFactory(new PropertyValueFactory<>("urunAdi"));
+
+            TableColumn<Satis, String> kategoriColumn = new TableColumn<>("Kategori");
+            kategoriColumn.setCellValueFactory(new PropertyValueFactory<>("kategori"));
+
             TableColumn<Satis, Integer> numaraColumn = new TableColumn<>("Numara");
             numaraColumn.setCellValueFactory(new PropertyValueFactory<>("numara"));
+
             TableColumn<Satis, Integer> adetColumn = new TableColumn<>("Adet");
             adetColumn.setCellValueFactory(new PropertyValueFactory<>("adet"));
+
             TableColumn<Satis, Double> birimFiyatColumn = new TableColumn<>("Birim Fiyat");
             birimFiyatColumn.setCellValueFactory(new PropertyValueFactory<>("birimFiyat"));
             birimFiyatColumn.setCellFactory(column -> new TableCell<>() {
@@ -201,6 +209,7 @@ public class MainController {
                     }
                 }
             });
+
             TableColumn<Satis, Double> toplamFiyatColumn = new TableColumn<>("Toplam Fiyat");
             toplamFiyatColumn.setCellValueFactory(new PropertyValueFactory<>("toplamFiyat"));
             toplamFiyatColumn.setCellFactory(column -> new TableCell<>() {
@@ -214,28 +223,39 @@ public class MainController {
                     }
                 }
             });
+
             TableColumn<Satis, String> tarihColumn = new TableColumn<>("Tarih");
             tarihColumn.setCellValueFactory(new PropertyValueFactory<>("formattedSatisTarihi"));
+
             TableColumn<Satis, String> musteriColumn = new TableColumn<>("Müşteri");
             musteriColumn.setCellValueFactory(new PropertyValueFactory<>("musteriAdi"));
-            tableView.getColumns().addAll(idColumn, urunColumn, numaraColumn, adetColumn,
+
+            // Kategori sütununu ekleyerek tüm sütunları tabloya ekle
+            tableView.getColumns().addAll(idColumn, urunColumn, kategoriColumn, numaraColumn, adetColumn,
                     birimFiyatColumn, toplamFiyatColumn, tarihColumn, musteriColumn);
+
             tableView.setItems(FXCollections.observableArrayList(satisListesi));
+
             // Toplam satış tutarını hesapla
             double toplamSatisTutari = satisListesi.stream()
                     .mapToDouble(Satis::getToplamFiyat)
                     .sum();
+
             Label toplamLabel = new Label(String.format("Toplam Satış Tutarı: %.2f TL", toplamSatisTutari));
             toplamLabel.setStyle("-fx-font-weight: bold;");
+
             Button kapatButton = new Button("Kapat");
             kapatButton.setOnAction(e -> stage.close());
+
             HBox bottomBox = new HBox(10, toplamLabel, new Region(), kapatButton);
             bottomBox.setPadding(new Insets(10));
             HBox.setHgrow(bottomBox.getChildren().get(1), Priority.ALWAYS);
+
             BorderPane borderPane = new BorderPane();
             borderPane.setCenter(tableView);
             borderPane.setBottom(bottomBox);
-            Scene scene = new Scene(borderPane, 800, 600);
+
+            Scene scene = new Scene(borderPane, 900, 600);
             stage.setScene(scene);
             stage.showAndWait();
         } catch (Exception e) {
@@ -300,7 +320,6 @@ public class MainController {
             stage.setTitle("Not Sistemi");
             stage.setScene(new Scene(root, 800, 600));
             stage.showAndWait();
-
             // Değişiklikleri kaydet
             VeriDepolama.kaydet(urunListesi, satisListesi, notListesi);
         } catch (Exception e) {

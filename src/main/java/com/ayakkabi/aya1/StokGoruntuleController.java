@@ -16,6 +16,8 @@ public class StokGoruntuleController {
     @FXML
     private TextField aramaField;
     @FXML
+    private ComboBox<String> kategoriFiltre; // Yeni eklenen kategori filtresi
+    @FXML
     private TableView<Urun> urunTable;
     @FXML
     private TableColumn<Urun, Integer> idColumn;
@@ -23,6 +25,8 @@ public class StokGoruntuleController {
     private TableColumn<Urun, String> modelColumn;
     @FXML
     private TableColumn<Urun, String> renkColumn;
+    @FXML
+    private TableColumn<Urun, String> kategoriColumn; // Yeni eklenen kategori sütunu
     @FXML
     private TableColumn<Urun, Double> fiyatColumn;
     @FXML
@@ -35,7 +39,6 @@ public class StokGoruntuleController {
     private TableColumn<NumaraAdet, Integer> adetColumn;
     @FXML
     private Label toplamUrunLabel;
-
     private List<Urun> urunListesi;
     private ObservableList<Urun> observableUrunListesi;
     private FilteredList<Urun> filteredUrunListesi;
@@ -43,16 +46,13 @@ public class StokGoruntuleController {
     public static class NumaraAdet {
         private final SimpleIntegerProperty numara;
         private final SimpleIntegerProperty adet;
-
         public NumaraAdet(int numara, int adet) {
             this.numara = new SimpleIntegerProperty(numara);
             this.adet = new SimpleIntegerProperty(adet);
         }
-
         public int getNumara() {
             return numara.get();
         }
-
         public int getAdet() {
             return adet.get();
         }
@@ -60,10 +60,20 @@ public class StokGoruntuleController {
 
     @FXML
     private void initialize() {
+        // Kategori filtresini doldur
+        kategoriFiltre.getItems().addAll("Tümü", "Erkek", "Kadın", "Çocuk");
+        kategoriFiltre.getSelectionModel().selectFirst();
+
+        // Kategori filtresi değişikliği dinleyicisi
+        kategoriFiltre.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+            filtreUygula();
+        });
+
         // Ürün tablosu sütunlarını ayarla
         idColumn.setCellValueFactory(new PropertyValueFactory<>("urunId"));
         modelColumn.setCellValueFactory(new PropertyValueFactory<>("modelAdi"));
         renkColumn.setCellValueFactory(new PropertyValueFactory<>("renk"));
+        kategoriColumn.setCellValueFactory(new PropertyValueFactory<>("kategori")); // Kategori sütunu
         fiyatColumn.setCellValueFactory(new PropertyValueFactory<>("fiyat"));
         toplamStokColumn.setCellValueFactory(new PropertyValueFactory<>("stokMiktari"));
 
@@ -99,9 +109,7 @@ public class StokGoruntuleController {
         observableUrunListesi = FXCollections.observableArrayList(urunListesi);
         filteredUrunListesi = new FilteredList<>(observableUrunListesi, p -> true);
         urunTable.setItems(filteredUrunListesi);
-
         toplamUrunLabel.setText("Toplam Ürün: " + urunListesi.size());
-
         // İlk ürünü seç (eğer varsa)
         if (!urunListesi.isEmpty()) {
             urunTable.getSelectionModel().selectFirst();
@@ -110,30 +118,41 @@ public class StokGoruntuleController {
 
     private void showNumaraAdetDetails(Urun urun) {
         ObservableList<NumaraAdet> numaraAdetList = FXCollections.observableArrayList();
-
         for (Map.Entry<Integer, Integer> entry : urun.getNumaraAdetMap().entrySet()) {
             numaraAdetList.add(new NumaraAdet(entry.getKey(), entry.getValue()));
         }
-
         numaraAdetTable.setItems(numaraAdetList);
     }
 
     @FXML
     private void aramaYap() {
+        filtreUygula();
+    }
+
+    private void filtreUygula() {
         String aramaKelimesi = aramaField.getText().toLowerCase();
+        String kategoriSecimi = kategoriFiltre.getValue();
 
         filteredUrunListesi.setPredicate(urun -> {
-            if (aramaKelimesi == null || aramaKelimesi.isEmpty()) {
-                return true;
+            // Kategori filtresi
+            boolean kategoriUygun = true;
+            if (!"Tümü".equals(kategoriSecimi)) {
+                kategoriUygun = urun.getKategori().equals(kategoriSecimi);
             }
 
-            String modelAdi = urun.getModelAdi().toLowerCase();
-            String renk = urun.getRenk().toLowerCase();
-            String urunId = String.valueOf(urun.getUrunId());
+            // Arama filtresi
+            boolean aramaUygun = true;
+            if (aramaKelimesi != null && !aramaKelimesi.isEmpty()) {
+                String modelAdi = urun.getModelAdi().toLowerCase();
+                String renk = urun.getRenk().toLowerCase();
+                String urunId = String.valueOf(urun.getUrunId());
 
-            return modelAdi.contains(aramaKelimesi) ||
-                    renk.contains(aramaKelimesi) ||
-                    urunId.contains(aramaKelimesi);
+                aramaUygun = modelAdi.contains(aramaKelimesi) ||
+                        renk.contains(aramaKelimesi) ||
+                        urunId.contains(aramaKelimesi);
+            }
+
+            return kategoriUygun && aramaUygun;
         });
 
         toplamUrunLabel.setText("Toplam Ürün: " + filteredUrunListesi.size());

@@ -91,34 +91,30 @@ public class RaporGonderController {
         LocalDate today = LocalDate.now();
         String fileName = "satis_raporu_" + reportType + "_" + today.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")) + ".csv";
         File file = new File(fileName);
-
         try (FileWriter writer = new FileWriter(file)) {
-            // CSV başlık - Tarih ve Müşteri sütunlarının yerlerini değiştirdik
-            writer.write("Satış ID,Ürün,Numara,Adet,Birim Fiyat,Toplam Fiyat,Müşteri,Tarih\n");
-
+            // CSV başlık - Kategori sütunu eklendi
+            writer.write("Satış ID,Ürün,Kategori,Numara,Adet,Birim Fiyat,Toplam Fiyat,Müşteri,Tarih\n");
             // Filtrelenmiş satış listesi
             List<Satis> filteredSales = filterSalesByReportType(satisListesi, reportType);
-
             // Tarih biçimlendirme için formatter
             DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
-
-            // CSV satırları - Tarih ve Müşteri değerlerinin yerlerini değiştirdik
+            // CSV satırları
             for (Satis satis : filteredSales) {
-                writer.write(String.format("%d,%s,%d,%d,%.2f,%.2f,%s,%s\n",
+                writer.write(String.format("%d,%s,%s,%d,%d,%.2f,%.2f,%s,%s\n",
                         satis.getSatisId(),
                         satis.getUrunAdi().replace(",", ";"),
+                        satis.getKategori().replace(",", ";"), // Kategori bilgisi eklendi
                         satis.getNumara(),
                         satis.getAdet(),
                         satis.getBirimFiyat(),
                         satis.getToplamFiyat(),
-                        satis.getMusteriAdi() != null ? satis.getMusteriAdi().replace(",", ";") : "", // Müşteri 7. sütuna
-                        satis.getSatisTarihi().format(dateFormatter) // Tarih 8. sütuna
+                        satis.getMusteriAdi() != null ? satis.getMusteriAdi().replace(",", ";") : "",
+                        satis.getSatisTarihi().format(dateFormatter)
                 ));
             }
-
-            // Toplam satış tutarını ekle - Toplam Fiyat sütununa (6. sütun) yazılacak
+            // Toplam satış tutarını ekle
             double toplamTutar = filteredSales.stream().mapToDouble(Satis::getToplamFiyat).sum();
-            writer.write(String.format(",,,,,%,.2f,TOPLAM,\n", toplamTutar));
+            writer.write(String.format(",,,,,%.2f,TOPLAM,,\n", toplamTutar));
         }
         return file;
     }

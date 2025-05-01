@@ -1,29 +1,28 @@
 package com.ayakkabi.aya1;
-
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class Satis {
     private static int sonSatisId = 0;
-
     private int satisId;
     private int urunId;
     private String urunAdi;
+    private String kategori; // Yeni kategori alanı
     private int numara;
     private int adet;
     private double birimFiyat;
     private double toplamFiyat;
     private LocalDateTime satisTarihi;
-
     // Opsiyonel müşteri bilgileri
     private String musteriAdi;
     private String telefon;
     private String not;
 
-    public Satis(int urunId, String urunAdi, int numara, int adet, double birimFiyat) {
+    public Satis(int urunId, String urunAdi, String kategori, int numara, int adet, double birimFiyat) {
         this.satisId = ++sonSatisId;
         this.urunId = urunId;
         this.urunAdi = urunAdi;
+        this.kategori = kategori;
         this.numara = numara;
         this.adet = adet;
         this.birimFiyat = birimFiyat;
@@ -41,6 +40,14 @@ public class Satis {
 
     public String getUrunAdi() {
         return urunAdi;
+    }
+
+    public String getKategori() {
+        return kategori;
+    }
+
+    public void setKategori(String kategori) {
+        this.kategori = kategori;
     }
 
     public int getNumara() {
@@ -94,7 +101,7 @@ public class Satis {
 
     @Override
     public String toString() {
-        return String.format("Satış ID: %d, Ürün: %s, Numara: %d, Adet: %d, Toplam: %.2f TL, Tarih: %s",
-                satisId, urunAdi, numara, adet, toplamFiyat, getFormattedSatisTarihi());
+        return String.format("Satış ID: %d, Ürün: %s, Kategori: %s, Numara: %d, Adet: %d, Toplam: %.2f TL, Tarih: %s",
+                satisId, urunAdi, kategori, numara, adet, toplamFiyat, getFormattedSatisTarihi());
     }
 }

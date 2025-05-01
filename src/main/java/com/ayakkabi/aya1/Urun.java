@@ -5,15 +5,17 @@ import java.util.Map;
 public class Urun {
     private int urunId;
     private String modelAdi;
-    private String renk;  // marka yerine renk
+    private String renk;
+    private String kategori; // Yeni eklenen kategori alanı
     private double fiyat;
     private int stokMiktari;
-    private Map<Integer, Integer> numaraAdetMap; // Numara ve adet bilgisi
+    private Map<Integer, Integer> numaraAdetMap;
 
-    public Urun(int urunId, String modelAdi, String renk, double fiyat, int stokMiktari) {  // marka yerine renk
+    public Urun(int urunId, String modelAdi, String renk, String kategori, double fiyat, int stokMiktari) {
         this.urunId = urunId;
         this.modelAdi = modelAdi;
-        this.renk = renk;  // marka yerine renk
+        this.renk = renk;
+        this.kategori = kategori;
         this.fiyat = fiyat;
         this.stokMiktari = stokMiktari;
         this.numaraAdetMap = new HashMap<>();
@@ -27,8 +29,12 @@ public class Urun {
         return modelAdi;
     }
 
-    public String getRenk() {  // getMarka yerine getRenk
+    public String getRenk() {
         return renk;
+    }
+
+    public String getKategori() {
+        return kategori;
     }
 
     public double getFiyat() {
@@ -47,8 +53,12 @@ public class Urun {
         this.modelAdi = modelAdi;
     }
 
-    public void setRenk(String renk) {  // setMarka yerine setRenk
+    public void setRenk(String renk) {
         this.renk = renk;
+    }
+
+    public void setKategori(String kategori) {
+        this.kategori = kategori;
     }
 
     public void setFiyat(double fiyat) {
@@ -65,6 +75,7 @@ public class Urun {
 
     @Override
     public String toString() {
-        return "Ürün ID: " + urunId + ", Model: " + modelAdi + ", Renk: " + renk + ", Fiyat: " + fiyat + " TL, Stok: " + stokMiktari;
+        return "Ürün ID: " + urunId + ", Model: " + modelAdi + ", Renk: " + renk +
+                ", Kategori: " + kategori + ", Fiyat: " + fiyat + " TL, Stok: " + stokMiktari;
     }
 }

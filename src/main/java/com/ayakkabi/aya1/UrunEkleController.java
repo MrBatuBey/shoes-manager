@@ -15,7 +15,9 @@ public class UrunEkleController {
     @FXML
     private TextField modelField;
     @FXML
-    private TextField renkField;  // markaField yerine renkField
+    private TextField renkField;
+    @FXML
+    private ComboBox<String> kategoriCombo; // Yeni ComboBox
     @FXML
     private TextField fiyatField;
     @FXML
@@ -32,27 +34,22 @@ public class UrunEkleController {
     private Label toplamStokLabel;
     @FXML
     private TextArea aciklamaArea;
-
     private List<Urun> urunListesi;
     private ObservableList<NumaraAdet> numaraAdetList = FXCollections.observableArrayList();
 
     public static class NumaraAdet {
         private final SimpleStringProperty numara;
         private final SimpleIntegerProperty adet;
-
         public NumaraAdet(String numara, int adet) {
             this.numara = new SimpleStringProperty(numara);
             this.adet = new SimpleIntegerProperty(adet);
         }
-
         public String getNumara() {
             return numara.get();
         }
-
         public int getAdet() {
             return adet.get();
         }
-
         public void setAdet(int adet) {
             this.adet.set(adet);
         }
@@ -63,6 +60,10 @@ public class UrunEkleController {
         numaraColumn.setCellValueFactory(new PropertyValueFactory<>("numara"));
         adetColumn.setCellValueFactory(new PropertyValueFactory<>("adet"));
         numaraTable.setItems(numaraAdetList);
+
+        // Kategori ComboBox'ını doldur
+        kategoriCombo.getItems().addAll("Erkek", "Kadın", "Çocuk");
+        kategoriCombo.getSelectionModel().selectFirst();
 
         // Sağ tıklama menüsü ekle
         ContextMenu contextMenu = new ContextMenu();
@@ -86,26 +87,22 @@ public class UrunEkleController {
     private void numaraEkle() {
         String numara = numaraField.getText();
         String adetStr = adetField.getText();
-
         if (numara.isEmpty() || adetStr.isEmpty()) {
             showAlert(Alert.AlertType.ERROR, "Hata", "Lütfen numara ve adet girin.");
             return;
         }
-
         try {
             int numaraInt = Integer.parseInt(numara);
             int adet = Integer.parseInt(adetStr);
-
-            if (numaraInt < 35 || numaraInt > 46) {
-                showAlert(Alert.AlertType.ERROR, "Hata", "Numara 35-46 arasında olmalıdır.");
+            // Numara aralığını 20-50 olarak değiştir
+            if (numaraInt < 20 || numaraInt > 50) {
+                showAlert(Alert.AlertType.ERROR, "Hata", "Numara 20-50 arasında olmalıdır.");
                 return;
             }
-
             if (adet <= 0) {
                 showAlert(Alert.AlertType.ERROR, "Hata", "Adet pozitif bir sayı olmalıdır.");
                 return;
             }
-
             // Aynı numara daha önce eklenmişse, adeti güncelle
             boolean numaraVarMi = false;
             for (NumaraAdet na : numaraAdetList) {
@@ -115,22 +112,17 @@ public class UrunEkleController {
                     break;
                 }
             }
-
             // Yeni numara ise listeye ekle
             if (!numaraVarMi) {
                 numaraAdetList.add(new NumaraAdet(numara, adet));
             }
-
             // Alanları temizle
             numaraField.clear();
             adetField.clear();
-
             // Toplam stoku güncelle
             updateToplamStok();
-
             // Tabloyu yenile
             numaraTable.refresh();
-
         } catch (NumberFormatException e) {
             showAlert(Alert.AlertType.ERROR, "Hata", "Lütfen geçerli bir numara ve adet girin.");
         }
@@ -147,11 +139,12 @@ public class UrunEkleController {
     @FXML
     private void ekleUrun() {
         String model = modelField.getText();
-        String renk = renkField.getText().toLowerCase();  // marka yerine renk
+        String renk = renkField.getText().toLowerCase();
+        String kategori = kategoriCombo.getValue(); // Kategori değerini al
         String fiyatStr = fiyatField.getText();
         String aciklama = aciklamaArea.getText();
 
-        if (model.isEmpty() || renk.isEmpty() || fiyatStr.isEmpty() || numaraAdetList.isEmpty()) {
+        if (model.isEmpty() || renk.isEmpty() || kategori == null || fiyatStr.isEmpty() || numaraAdetList.isEmpty()) {
             showAlert(Alert.AlertType.ERROR, "Hata", "Lütfen tüm alanları doldurun ve en az bir numara ekleyin.");
             return;
         }
@@ -159,9 +152,10 @@ public class UrunEkleController {
         try {
             double fiyat = Double.parseDouble(fiyatStr);
             int toplamStok = Integer.parseInt(toplamStokLabel.getText());
-
             int yeniId = urunListesi.isEmpty() ? 1 : urunListesi.get(urunListesi.size() - 1).getUrunId() + 1;
-            Urun yeniUrun = new Urun(yeniId, model, renk, fiyat, toplamStok);  // marka yerine renk
+
+            // Kategori parametresini ekleyerek yeni Urun oluştur
+            Urun yeniUrun = new Urun(yeniId, model, renk, kategori, fiyat, toplamStok);
 
             // Numara ve adetleri ekle
             for (NumaraAdet na : numaraAdetList) {
@@ -169,12 +163,10 @@ public class UrunEkleController {
             }
 
             urunListesi.add(yeniUrun);
-
             showAlert(Alert.AlertType.INFORMATION, "Başarılı", "Ürün başarıyla eklendi: " + model);
 
             // Formu kapat
             iptal();
-
         } catch (NumberFormatException e) {
             showAlert(Alert.AlertType.ERROR, "Hata", "Lütfen geçerli bir fiyat girin.");
         }

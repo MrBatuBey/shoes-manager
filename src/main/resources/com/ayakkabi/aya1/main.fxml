@@ -1,21 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<StackPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1"
+<StackPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/17"
            fx:controller="com.ayakkabi.aya1.MainController"
            stylesheets="@styles/main-styles.css">
-
     <VBox alignment="CENTER" prefHeight="624.0" prefWidth="874.0" spacing="15">
         <padding>
             <Insets bottom="25" left="25" right="25" top="25" />
         </padding>
-
         <VBox styleClass="main-container" VBox.vgrow="ALWAYS">
             <Label styleClass="main-title" text="                                                          Şahika Ayakkabı Stok ve Satış Yönetimi" />
             <Separator />
-
             <!-- Ürün Yönetimi -->
             <VBox spacing="10" styleClass="section-panel">
                 <padding>
@@ -28,9 +24,7 @@
                     <Button onAction="#urunDuzenle" prefHeight="63.0" prefWidth="189.0" text="Ürünleri Düzenle" />
                 </HBox>
             </VBox>
-
             <Separator />
-
             <!-- Satış Yönetimi -->
             <VBox spacing="10" styleClass="section-panel">
                 <padding>
@@ -49,10 +43,8 @@
                     <Button onAction="#satisYap" prefHeight="45.0" prefWidth="189.0" styleClass="success-button" text="Satış Yap" />
                 </HBox>
             </VBox>
-
             <Region VBox.vgrow="ALWAYS" />
         </VBox>
-
         <Label styleClass="footer-text" text="© 2024 Şahika Ayakkabı Stok Yönetim Sistemi" />
     </VBox>
 </StackPane>

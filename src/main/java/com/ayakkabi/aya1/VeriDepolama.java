@@ -1,5 +1,4 @@
 package com.ayakkabi.aya1;
-
 import java.io.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -32,13 +31,14 @@ public class VeriDepolama {
     private static void kaydetUrunler(List<Urun> urunListesi) {
         try (PrintWriter writer = new PrintWriter(new FileWriter(URUNLER_DOSYA))) {
             // Başlık satırı
-            writer.println("urun_id,model_adi,renk,fiyat,stok_miktari");
+            writer.println("urun_id,model_adi,renk,kategori,fiyat,stok_miktari");
             // Veri satırları
             for (Urun urun : urunListesi) {
                 writer.println(
                         urun.getUrunId() + "," +
                                 escapeCSV(urun.getModelAdi()) + "," +
                                 escapeCSV(urun.getRenk()) + "," +
+                                escapeCSV(urun.getKategori()) + "," +
                                 urun.getFiyat() + "," +
                                 urun.getStokMiktari()
                 );
@@ -73,14 +73,15 @@ public class VeriDepolama {
 
     private static void kaydetSatislar(List<Satis> satisListesi) {
         try (PrintWriter writer = new PrintWriter(new FileWriter(SATISLAR_DOSYA))) {
-            // Başlık satırı
-            writer.println("satis_id,urun_id,urun_adi,numara,adet,birim_fiyat,toplam_fiyat,satis_tarihi,musteri_adi,telefon,not");
+            // Başlık satırı - kategori eklendi
+            writer.println("satis_id,urun_id,urun_adi,kategori,numara,adet,birim_fiyat,toplam_fiyat,satis_tarihi,musteri_adi,telefon,not");
             // Veri satırları
             for (Satis satis : satisListesi) {
                 writer.println(
                         satis.getSatisId() + "," +
                                 satis.getUrunId() + "," +
                                 escapeCSV(satis.getUrunAdi()) + "," +
+                                escapeCSV(satis.getKategori()) + "," +
                                 satis.getNumara() + "," +
                                 satis.getAdet() + "," +
                                 satis.getBirimFiyat() + "," +
@@ -123,6 +124,21 @@ public class VeriDepolama {
         }
     }
 
+    // Sayısal değerleri güvenli bir şekilde parse etmek için yardımcı metot
+    private static int safeParseInt(String value) {
+        try {
+            return Integer.parseInt(value);
+        } catch (NumberFormatException e) {
+            // Ondalıklı sayı ise, önce double'a çevirip sonra int'e dönüştür
+            try {
+                return (int) Double.parseDouble(value);
+            } catch (NumberFormatException ex) {
+                System.err.println("Geçersiz sayı formatı: " + value);
+                return 0; // Varsayılan değer
+            }
+        }
+    }
+
     public static List<Urun> yukleUrunler() {
         List<Urun> urunListesi = new ArrayList<>();
         Map<Integer, Urun> urunMap = new HashMap<>();
@@ -138,13 +154,14 @@ public class VeriDepolama {
                         continue; // Başlık satırını atla
                     }
                     String[] parts = parseCSVLine(line);
-                    if (parts.length >= 5) {
-                        int id = Integer.parseInt(parts[0]);
+                    if (parts.length >= 6) { // Kategori eklendiğinden eleman sayısı arttı
+                        int id = safeParseInt(parts[0]);
                         String modelAdi = parts[1];
                         String renk = parts[2];
-                        double fiyat = Double.parseDouble(parts[3]);
-                        int stokMiktari = Integer.parseInt(parts[4]);
-                        Urun urun = new Urun(id, modelAdi, renk, fiyat, stokMiktari);
+                        String kategori = parts[3];
+                        double fiyat = Double.parseDouble(parts[4]);
+                        int stokMiktari = safeParseInt(parts[5]);
+                        Urun urun = new Urun(id, modelAdi, renk, kategori, fiyat, stokMiktari);
                         urunListesi.add(urun);
                         urunMap.put(id, urun);
                     }
@@ -152,6 +169,9 @@ public class VeriDepolama {
                 System.out.println("Ürünler başarıyla yüklendi.");
             } catch (IOException e) {
                 System.err.println("Ürünler yüklenirken hata oluştu: " + e.getMessage());
+                e.printStackTrace();
+            } catch (Exception e) {
+                System.err.println("Ürünler yüklenirken beklenmeyen hata: " + e.getMessage());
                 e.printStackTrace();
             }
         } else {
@@ -170,9 +190,9 @@ public class VeriDepolama {
                     }
                     String[] parts = parseCSVLine(line);
                     if (parts.length >= 3) {
-                        int urunId = Integer.parseInt(parts[0]);
-                        int numara = Integer.parseInt(parts[1]);
-                        int adet = Integer.parseInt(parts[2]);
+                        int urunId = safeParseInt(parts[0]);
+                        int numara = safeParseInt(parts[1]);
+                        int adet = safeParseInt(parts[2]);
                         Urun urun = urunMap.get(urunId);
                         if (urun != null) {
                             urun.addNumaraAdet(numara, adet);
@@ -182,6 +202,9 @@ public class VeriDepolama {
                 System.out.println("Numara-stok bilgileri başarıyla yüklendi.");
             } catch (IOException e) {
                 System.err.println("Numara-stok bilgileri yüklenirken hata oluştu: " + e.getMessage());
+                e.printStackTrace();
+            } catch (Exception e) {
+                System.err.println("Numara-stok bilgileri yüklenirken beklenmeyen hata: " + e.getMessage());
                 e.printStackTrace();
             }
         } else {
@@ -202,37 +225,57 @@ public class VeriDepolama {
                         isHeader = false;
                         continue; // Başlık satırını atla
                     }
-                    String[] parts = parseCSVLine(line);
-                    if (parts.length >= 8) {
-                        int satisId = Integer.parseInt(parts[0]);
-                        int urunId = Integer.parseInt(parts[1]);
-                        String urunAdi = parts[2];
-                        int numara = Integer.parseInt(parts[3]);
-                        int adet = Integer.parseInt(parts[4]);
-                        double birimFiyat = Double.parseDouble(parts[5]);
-                        // Satış nesnesi oluştur
-                        Satis satis = new Satis(urunId, urunAdi, numara, adet, birimFiyat);
-                        // Satış ID'sini ayarla (özel bir metot eklenmesi gerekebilir)
-                        // satis.setSatisId(satisId);
-                        // Satış tarihini ayarla
-                        LocalDateTime satisTarihi = LocalDateTime.parse(parts[7], DATE_FORMATTER);
-                        // satis.setSatisTarihi(satisTarihi);
-                        // Müşteri bilgilerini ayarla (eğer varsa)
-                        if (parts.length > 8 && !parts[8].isEmpty()) {
-                            satis.setMusteriAdi(parts[8]);
+                    try {
+                        String[] parts = parseCSVLine(line);
+                        if (parts.length >= 8) { // En az 8 alan olmalı
+                            int satisId = safeParseInt(parts[0]);
+                            int urunId = safeParseInt(parts[1]);
+                            String urunAdi = parts[2];
+
+                            // Kategori için güvenli kontrol
+                            String kategori = parts.length > 3 ? parts[3] : "Belirtilmemiş";
+
+                            int numara = safeParseInt(parts.length > 4 ? parts[4] : "0");
+                            int adet = safeParseInt(parts.length > 5 ? parts[5] : "0");
+
+                            // Fiyat değerleri için güvenli parse
+                            double birimFiyat = 0.0;
+                            if (parts.length > 6 && !parts[6].isEmpty()) {
+                                try {
+                                    birimFiyat = Double.parseDouble(parts[6]);
+                                } catch (NumberFormatException e) {
+                                    System.err.println("Geçersiz birim fiyat formatı: " + parts[6]);
+                                }
+                            }
+
+                            // Kategori içeren Satis nesnesi oluştur
+                            Satis satis = new Satis(urunId, urunAdi, kategori, numara, adet, birimFiyat);
+
+                            // Müşteri bilgileri
+                            if (parts.length > 9 && !parts[9].isEmpty()) {
+                                satis.setMusteriAdi(parts[9]);
+                            }
+                            if (parts.length > 10 && !parts[10].isEmpty()) {
+                                satis.setTelefon(parts[10]);
+                            }
+                            if (parts.length > 11 && !parts[11].isEmpty()) {
+                                satis.setNot(parts[11]);
+                            }
+                            satisListesi.add(satis);
                         }
-                        if (parts.length > 9 && !parts[9].isEmpty()) {
-                            satis.setTelefon(parts[9]);
-                        }
-                        if (parts.length > 10 && !parts[10].isEmpty()) {
-                            satis.setNot(parts[10]);
-                        }
-                        satisListesi.add(satis);
+                    } catch (Exception e) {
+                        System.err.println("Satır işlenirken hata oluştu: " + line);
+                        System.err.println("Hata detayı: " + e.getMessage());
+                        e.printStackTrace();
+                        // Hatayı yutup diğer satırları işlemeye devam et
                     }
                 }
                 System.out.println("Satışlar başarıyla yüklendi.");
             } catch (IOException e) {
                 System.err.println("Satışlar yüklenirken hata oluştu: " + e.getMessage());
+                e.printStackTrace();
+            } catch (Exception e) {
+                System.err.println("Satışlar yüklenirken beklenmeyen hata: " + e.getMessage());
                 e.printStackTrace();
             }
         } else {
@@ -253,32 +296,64 @@ public class VeriDepolama {
                         isHeader = false;
                         continue; // Başlık satırını atla
                     }
-                    String[] parts = parseCSVLine(line);
-                    if (parts.length >= 8) {
-                        int notId = Integer.parseInt(parts[0]);
-                        String musteriAdi = parts[1];
-                        String telefon = parts[2];
-                        String notTipi = parts[3];
-                        String notIcerigi = parts[4];
-                        double tutar = Double.parseDouble(parts[5]);
-                        boolean tamamlandi = Boolean.parseBoolean(parts[6]);
-                        LocalDateTime olusturmaTarihi = LocalDateTime.parse(parts[7], DATE_FORMATTER);
-                        LocalDateTime teslimTarihi = null;
-                        if (parts.length > 8 && !parts[8].isEmpty()) {
-                            teslimTarihi = LocalDateTime.parse(parts[8], DATE_FORMATTER);
+                    try {
+                        String[] parts = parseCSVLine(line);
+                        if (parts.length >= 8) {
+                            int notId = safeParseInt(parts[0]);
+                            String musteriAdi = parts[1];
+                            String telefon = parts[2];
+                            String notTipi = parts[3];
+                            String notIcerigi = parts[4];
+
+                            // Tutar için güvenli parse
+                            double tutar = 0.0;
+                            if (parts.length > 5 && !parts[5].isEmpty()) {
+                                try {
+                                    tutar = Double.parseDouble(parts[5]);
+                                } catch (NumberFormatException e) {
+                                    System.err.println("Geçersiz tutar formatı: " + parts[5]);
+                                }
+                            }
+
+                            boolean tamamlandi = parts.length > 6 && "true".equalsIgnoreCase(parts[6]);
+
+                            // Tarih alanları için güvenli parse
+                            LocalDateTime olusturmaTarihi = LocalDateTime.now();
+                            if (parts.length > 7 && !parts[7].isEmpty()) {
+                                try {
+                                    olusturmaTarihi = LocalDateTime.parse(parts[7], DATE_FORMATTER);
+                                } catch (Exception e) {
+                                    System.err.println("Geçersiz oluşturma tarihi formatı: " + parts[7]);
+                                }
+                            }
+
+                            LocalDateTime teslimTarihi = null;
+                            if (parts.length > 8 && !parts[8].isEmpty()) {
+                                try {
+                                    teslimTarihi = LocalDateTime.parse(parts[8], DATE_FORMATTER);
+                                } catch (Exception e) {
+                                    System.err.println("Geçersiz teslim tarihi formatı: " + parts[8]);
+                                }
+                            }
+
+                            Not not = new Not(musteriAdi, telefon, notTipi, notIcerigi, tutar, teslimTarihi);
+                            not.setNotId(notId);
+                            not.setTamamlandi(tamamlandi);
+                            not.setOlusturmaTarihi(olusturmaTarihi);
+                            notListesi.add(not);
                         }
-
-                        Not not = new Not(musteriAdi, telefon, notTipi, notIcerigi, tutar, teslimTarihi);
-                        not.setNotId(notId);
-                        not.setTamamlandi(tamamlandi);
-                        not.setOlusturmaTarihi(olusturmaTarihi);
-
-                        notListesi.add(not);
+                    } catch (Exception e) {
+                        System.err.println("Not satırı işlenirken hata oluştu: " + line);
+                        System.err.println("Hata detayı: " + e.getMessage());
+                        // Hatayı yutup diğer satırları işlemeye devam et
                     }
                 }
                 System.out.println("Notlar başarıyla yüklendi.");
             } catch (IOException e) {
                 System.err.println("Notlar yüklenirken hata oluştu: " + e.getMessage());
+                e.printStackTrace();
+            } catch (Exception e) {
+                System.err.println("Notlar yüklenirken beklenmeyen hata: " + e.getMessage());
                 e.printStackTrace();
             }
         } else {

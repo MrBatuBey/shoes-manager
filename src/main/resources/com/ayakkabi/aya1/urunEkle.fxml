@@ -6,20 +6,22 @@
     <padding>
         <Insets top="20" right="20" bottom="20" left="20"/>
     </padding>
-
     <Label text="Model:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
     <TextField fx:id="modelField" promptText="Model" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
 
     <Label text="Renk:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
     <TextField fx:id="renkField" promptText="Renk" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
 
-    <Label text="Fiyat:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
-    <TextField fx:id="fiyatField" promptText="Fiyat" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+    <Label text="Kategori:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+    <ComboBox fx:id="kategoriCombo" GridPane.rowIndex="2" GridPane.columnIndex="1" maxWidth="Infinity"/>
 
-    <Label text="Numaralar ve Adetler:" GridPane.rowIndex="3" GridPane.columnIndex="0" GridPane.valignment="TOP"/>
-    <VBox spacing="5" GridPane.rowIndex="3" GridPane.columnIndex="1">
+    <Label text="Fiyat:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+    <TextField fx:id="fiyatField" promptText="Fiyat" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+    <Label text="Numaralar ve Adetler:" GridPane.rowIndex="4" GridPane.columnIndex="0" GridPane.valignment="TOP"/>
+    <VBox spacing="5" GridPane.rowIndex="4" GridPane.columnIndex="1">
         <HBox spacing="5">
-            <TextField fx:id="numaraField" promptText="Numara" prefWidth="80"/>
+            <TextField fx:id="numaraField" promptText="Numara (20-50)" prefWidth="100"/>
             <TextField fx:id="adetField" promptText="Adet" prefWidth="80"/>
             <Button text="Ekle" onAction="#numaraEkle"/>
         </HBox>
@@ -31,13 +33,13 @@
         </TableView>
     </VBox>
 
-    <Label text="Toplam Stok:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
-    <Label fx:id="toplamStokLabel" text="0" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+    <Label text="Toplam Stok:" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
+    <Label fx:id="toplamStokLabel" text="0" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
 
-    <Label text="Açıklama:" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
-    <TextArea fx:id="aciklamaArea" promptText="Ürün Açıklaması" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+    <Label text="Açıklama:" GridPane.rowIndex="6" GridPane.columnIndex="0"/>
+    <TextArea fx:id="aciklamaArea" promptText="Ürün Açıklaması" GridPane.rowIndex="6" GridPane.columnIndex="1"/>
 
-    <HBox spacing="10" GridPane.rowIndex="6" GridPane.columnIndex="1">
+    <HBox spacing="10" GridPane.rowIndex="7" GridPane.columnIndex="1">
         <Button text="Ürünü Kaydet" onAction="#ekleUrun"/>
         <Button text="İptal" onAction="#iptal"/>
     </HBox>

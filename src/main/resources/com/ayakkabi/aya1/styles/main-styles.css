@@ -1,12 +1,8 @@
 /* main-styles.css - Arkaplan resmi eklenmiş hali */
-
 .root {
     -fx-font-family: "Segoe UI", Arial, sans-serif;
     -fx-font-size: 14px;
-    -fx-background-image: url("/com/ayakkabi/aya1/images/main.png"); /* Arkaplan resmi */
-    -fx-background-size: cover; /* Resmi ekrana sığdır */
-    -fx-background-position: center; /* Resmi ortala */
-    -fx-background-repeat: no-repeat; /* Tekrarlamayı engelle */
+    -fx-background-color: #f0f0f0; /* Arkaplan rengi */
 }
 
 /* Ana panel - içeriği tutacak panel (yarı saydam beyaz) */
@@ -97,9 +93,8 @@
 /* Alt bilgi */
 .footer-text {
     -fx-font-style: italic;
-    -fx-text-fill: white; /* Arkaplan üzerinde beyaz metin */
+    -fx-text-fill: #7f8c8d; /* Alt bilgi metin rengi */
     -fx-font-size: 12px;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 2, 0, 0, 0); /* Metin gölgesi */
 }
 
 /* Buton grupları için stil */
