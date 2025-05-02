@@ -9,14 +9,16 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class StokGoruntuleController {
     @FXML
     private TextField aramaField;
     @FXML
-    private ComboBox<String> kategoriFiltre; // Yeni eklenen kategori filtresi
+    private ComboBox<String> kategoriFiltre;
     @FXML
     private TableView<Urun> urunTable;
     @FXML
@@ -26,7 +28,7 @@ public class StokGoruntuleController {
     @FXML
     private TableColumn<Urun, String> renkColumn;
     @FXML
-    private TableColumn<Urun, String> kategoriColumn; // Yeni eklenen kategori sütunu
+    private TableColumn<Urun, String> kategoriColumn;
     @FXML
     private TableColumn<Urun, Double> fiyatColumn;
     @FXML
@@ -39,10 +41,14 @@ public class StokGoruntuleController {
     private TableColumn<NumaraAdet, Integer> adetColumn;
     @FXML
     private Label toplamUrunLabel;
+    @FXML
+    private Button silButton; // Yeni eklenen Sil butonu
+
     private List<Urun> urunListesi;
     private ObservableList<Urun> observableUrunListesi;
     private FilteredList<Urun> filteredUrunListesi;
 
+    // NumaraAdet sınıfı değişmedi...
     public static class NumaraAdet {
         private final SimpleIntegerProperty numara;
         private final SimpleIntegerProperty adet;
@@ -73,7 +79,7 @@ public class StokGoruntuleController {
         idColumn.setCellValueFactory(new PropertyValueFactory<>("urunId"));
         modelColumn.setCellValueFactory(new PropertyValueFactory<>("modelAdi"));
         renkColumn.setCellValueFactory(new PropertyValueFactory<>("renk"));
-        kategoriColumn.setCellValueFactory(new PropertyValueFactory<>("kategori")); // Kategori sütunu
+        kategoriColumn.setCellValueFactory(new PropertyValueFactory<>("kategori"));
         fiyatColumn.setCellValueFactory(new PropertyValueFactory<>("fiyat"));
         toplamStokColumn.setCellValueFactory(new PropertyValueFactory<>("stokMiktari"));
 
@@ -94,14 +100,60 @@ public class StokGoruntuleController {
         numaraColumn.setCellValueFactory(new PropertyValueFactory<>("numara"));
         adetColumn.setCellValueFactory(new PropertyValueFactory<>("adet"));
 
-        // Ürün seçildiğinde numara-adet detaylarını göster
+        // Ürün seçildiğinde numara-adet detaylarını göster ve sil butonunu etkinleştir
         urunTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
                 showNumaraAdetDetails(newSelection);
+                silButton.setDisable(false); // Ürün seçildiğinde sil butonu etkinleştir
             } else {
                 numaraAdetTable.getItems().clear();
+                silButton.setDisable(true); // Ürün seçili değilse sil butonu devre dışı bırak
             }
         });
+
+        // Başlangıçta sil butonu devre dışı
+        if (silButton != null) {
+            silButton.setDisable(true);
+        }
+    }
+
+    // Yeni eklenen ürün silme metodu
+    @FXML
+    private void urunSil() {
+        Urun secilenUrun = urunTable.getSelectionModel().getSelectedItem();
+        if (secilenUrun == null) {
+            showAlert(Alert.AlertType.WARNING, "Uyarı", "Lütfen silmek için bir ürün seçin.");
+            return;
+        }
+
+        // Silme işlemi onayını al
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Ürün Sil");
+        alert.setHeaderText("Ürün Silme Onayı");
+        alert.setContentText("\"" + secilenUrun.getModelAdi() + "\" ürününü silmek istediğinizden emin misiniz?\n" +
+                "Bu işlem geri alınamaz!");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            // Ürünü listeden kaldır
+            urunListesi.remove(secilenUrun);
+            observableUrunListesi.remove(secilenUrun);
+
+            // Tabloyu güncelle ve bilgi mesajı göster
+            toplamUrunLabel.setText("Toplam Ürün: " + filteredUrunListesi.size());
+            showAlert(Alert.AlertType.INFORMATION, "Başarılı",
+                    "\"" + secilenUrun.getModelAdi() + "\" ürünü başarıyla silindi.");
+
+            // Değişiklikleri kaydet
+            kaydetDegisiklikler();
+        }
+    }
+
+    // Değişiklikleri kaydetmek için yardımcı metot
+    private void kaydetDegisiklikler() {
+        // MainController'a erişim yoksa burada doğrudan VeriDepolama'yı kullanabiliriz
+        // Bu örnekte sadece ürünleri kaydediyoruz, ihtiyaca göre değiştirilebilir
+        VeriDepolama.kaydet(urunListesi, new ArrayList<>(), new ArrayList<>());
     }
 
     public void setUrunListesi(List<Urun> urunListesi) {
@@ -156,6 +208,14 @@ public class StokGoruntuleController {
         });
 
         toplamUrunLabel.setText("Toplam Ürün: " + filteredUrunListesi.size());
+    }
+
+    private void showAlert(Alert.AlertType alertType, String title, String message) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
     @FXML

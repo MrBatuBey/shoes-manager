@@ -52,6 +52,8 @@
             </padding>
             <Label fx:id="toplamUrunLabel" text="Toplam Ürün: 0"/>
             <Region HBox.hgrow="ALWAYS"/>
+            <!-- Ürün Silme Butonu -->
+            <Button fx:id="silButton" text="Ürünü Sil" onAction="#urunSil" style="-fx-base: #e74c3c;"/>
             <Button text="Kapat" onAction="#kapat"/>
         </HBox>
     </bottom>
