@@ -5,8 +5,12 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
@@ -42,23 +46,25 @@ public class StokGoruntuleController {
     @FXML
     private Label toplamUrunLabel;
     @FXML
-    private Button silButton; // Yeni eklenen Sil butonu
+    private Button silButton; // Sil butonu
 
     private List<Urun> urunListesi;
     private ObservableList<Urun> observableUrunListesi;
     private FilteredList<Urun> filteredUrunListesi;
 
-    // NumaraAdet sınıfı değişmedi...
     public static class NumaraAdet {
         private final SimpleIntegerProperty numara;
         private final SimpleIntegerProperty adet;
+
         public NumaraAdet(int numara, int adet) {
             this.numara = new SimpleIntegerProperty(numara);
             this.adet = new SimpleIntegerProperty(adet);
         }
+
         public int getNumara() {
             return numara.get();
         }
+
         public int getAdet() {
             return adet.get();
         }
@@ -111,13 +117,57 @@ public class StokGoruntuleController {
             }
         });
 
+        // Çift tıklama ile ürün detay ekranını açma
+        urunTable.setRowFactory(tv -> {
+            TableRow<Urun> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && (!row.isEmpty())) {
+                    Urun secilenUrun = row.getItem();
+                    urunDetayGoster(secilenUrun);
+                }
+            });
+            return row;
+        });
+
         // Başlangıçta sil butonu devre dışı
         if (silButton != null) {
             silButton.setDisable(true);
         }
     }
 
-    // Yeni eklenen ürün silme metodu
+    private void urunDetayGoster(Urun urun) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ayakkabi/aya1/urunDetay.fxml"));
+            Parent root = loader.load();
+
+            UrunDetayController controller = loader.getController();
+            controller.setUrun(urun);
+
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("Ürün Detayları - " + urun.getModelAdi());
+            stage.setScene(new Scene(root));
+            stage.showAndWait();
+
+            // Değişiklikleri tabloda güncelle
+            urunTable.refresh();
+
+            // Ürün numara-adet detaylarını güncelle
+            showNumaraAdetDetails(urun);
+
+            // Toplam ürün sayısını güncelle
+            toplamUrunLabel.setText("Toplam Ürün: " + filteredUrunListesi.size());
+
+            // Değişiklikleri kaydet
+            kaydetDegisiklikler();
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Hata",
+                    "Ürün detayları gösterilirken bir hata oluştu: " + e.getMessage());
+        }
+    }
+
+    // Ürün silme metodu
     @FXML
     private void urunSil() {
         Urun secilenUrun = urunTable.getSelectionModel().getSelectedItem();

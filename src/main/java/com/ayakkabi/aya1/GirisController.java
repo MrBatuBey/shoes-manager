@@ -36,7 +36,7 @@ public class GirisController {
         String kullaniciAdi = kullaniciAdiField.getText();
         String sifre = sifreField.getText();
 
-        if (kullaniciAdi.equals("123123") && sifre.equals("123123")) { // Örnek kullanıcı adı ve şifre
+        if (kullaniciAdi.equals("sahika") && sifre.equals("123123")) { // Örnek kullanıcı adı ve şifre
             try {
                 // Resource'un null olup olmadığını kontrol et
                 Stage stage = (Stage) kullaniciAdiField.getScene().getWindow();

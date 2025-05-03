@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.ayakkabi.aya1.UrunDetayController"
+            prefWidth="600" prefHeight="500" stylesheets="@styles/main-styles.css">
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <top>
+        <VBox spacing="10">
+            <HBox alignment="CENTER">
+                <Label text="Ürün Detayları" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+            </HBox>
+            <Separator/>
+        </VBox>
+    </top>
+
+    <center>
+        <VBox spacing="15">
+            <GridPane hgap="10" vgap="10">
+                <columnConstraints>
+                    <ColumnConstraints minWidth="100" prefWidth="120"/>
+                    <ColumnConstraints hgrow="ALWAYS"/>
+                </columnConstraints>
+
+                <Label text="Ürün ID:" GridPane.columnIndex="0" GridPane.rowIndex="0"
+                       style="-fx-font-weight: bold;"/>
+                <Label fx:id="urunIdLabel" text="[id]" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                <Label text="Model:" GridPane.columnIndex="0" GridPane.rowIndex="1"
+                       style="-fx-font-weight: bold;"/>
+                <Label fx:id="modelAdiLabel" text="[model]" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                <Label text="Renk:" GridPane.columnIndex="0" GridPane.rowIndex="2"
+                       style="-fx-font-weight: bold;"/>
+                <Label fx:id="renkLabel" text="[renk]" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+                <Label text="Kategori:" GridPane.columnIndex="0" GridPane.rowIndex="3"
+                       style="-fx-font-weight: bold;"/>
+                <Label fx:id="kategoriLabel" text="[kategori]" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+
+                <Label text="Fiyat:" GridPane.columnIndex="0" GridPane.rowIndex="4"
+                       style="-fx-font-weight: bold;"/>
+                <Label fx:id="fiyatLabel" text="[fiyat]" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+
+                <Label text="Toplam Stok:" GridPane.columnIndex="0" GridPane.rowIndex="5"
+                       style="-fx-font-weight: bold;"/>
+                <Label fx:id="toplamStokLabel" text="[stok]" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+            </GridPane>
+
+            <Separator/>
+
+            <Label text="Numara - Adet Bilgileri" style="-fx-font-weight: bold;"/>
+
+            <TableView fx:id="numaraAdetTable" prefHeight="150" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="numaraColumn" text="Numara" prefWidth="150"/>
+                    <TableColumn fx:id="adetColumn" text="Adet" prefWidth="150"/>
+                </columns>
+                <placeholder>
+                    <Label text="Numara bilgisi bulunmamaktadır"/>
+                </placeholder>
+            </TableView>
+
+            <TitledPane text="Yeni Numara Ekle" expanded="false">
+                <GridPane hgap="10" vgap="10">
+                    <padding>
+                        <Insets top="5" right="5" bottom="5" left="5"/>
+                    </padding>
+
+                    <Label text="Numara:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                    <TextField fx:id="yeniNumaraField" promptText="20-50 arası" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                    <Label text="Adet:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                    <TextField fx:id="yeniAdetField" promptText="Adet girin" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                    <Button fx:id="numaraEkleButton" text="Ekle" onAction="#ekleNumaraAdet"
+                            GridPane.columnIndex="2" GridPane.rowIndex="1"/>
+                </GridPane>
+            </TitledPane>
+
+            <TitledPane text="Fiyat Güncelle" expanded="false">
+                <GridPane hgap="10" vgap="10">
+                    <padding>
+                        <Insets top="5" right="5" bottom="5" left="5"/>
+                    </padding>
+
+                    <Label text="Yeni Fiyat (TL):" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                    <TextField fx:id="fiyatGuncelleField" promptText="0.00" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                    <Button fx:id="fiyatGuncelleButton" text="Güncelle" onAction="#guncelleFiyat"
+                            GridPane.columnIndex="2" GridPane.rowIndex="0"/>
+                </GridPane>
+            </TitledPane>
+        </VBox>
+    </center>
+
+    <bottom>
+        <HBox spacing="10" alignment="CENTER_RIGHT">
+            <padding>
+                <Insets top="10" right="0" bottom="0" left="0"/>
+            </padding>
+            <Button text="İptal" onAction="#iptalEt" prefWidth="100"/>
+            <Button text="Kaydet" onAction="#kaydetDegisiklikler" prefWidth="100" style="-fx-base: #4CAF50;"/>
+        </HBox>
+    </bottom>
+</BorderPane>
