@@ -10,8 +10,8 @@ import java.util.Properties;
 
 public class EmailService {
     // Gmail hesap bilgileri
-    private static final String GMAIL_USERNAME = "batuyumben@gmail.com"; // Gmail adresinizi buraya yazın
-    private static final String GMAIL_PASSWORD = "zszqyhumqlqaqlqs"; // Gmail şifrenizi veya uygulama şifrenizi buraya yazın
+    private static final String GMAIL_USERNAME = ""; // Gmail adresinizi buraya yazın
+    private static final String GMAIL_PASSWORD = ""; // Gmail şifrenizi veya uygulama şifrenizi buraya yazın
 
     public static void sendEmail(String recipient, String subject, String body, File attachment) throws Exception {
         Properties props = new Properties();
