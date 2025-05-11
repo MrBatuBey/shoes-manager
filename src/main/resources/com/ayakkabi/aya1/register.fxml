@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
+
+<VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ayakkabi.aya1.RegisterController">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+    </padding>
+
+    <Text style="-fx-font-size: 24px;" text="Kayıt Ol"/>
+    
+    <GridPane hgap="10" vgap="10">
+        <Label text="Ad:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+        <TextField fx:id="adField" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+        
+        <Label text="Soyad:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+        <TextField fx:id="soyadField" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+        
+        <Label text="E-posta:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+        <TextField fx:id="emailField" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+        
+        <Label text="Şifre:" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+        <PasswordField fx:id="sifreField" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+        
+        <Label text="Şifre Tekrar:" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+        <PasswordField fx:id="sifreTekrarField" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+    </GridPane>
+
+    <HBox spacing="10" alignment="CENTER">
+        <Button text="Kayıt Ol" onAction="#handleKayit"/>
+        <Button text="Giriş Yap" onAction="#handleGiris"/>
+    </HBox>
+</VBox> 

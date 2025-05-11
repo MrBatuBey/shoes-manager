@@ -12,6 +12,7 @@ public class VeriDepolama {
     private static final String NUMARA_STOK_DOSYA = "numara_stok.csv";
     private static final String SATISLAR_DOSYA = "satislar.csv";
     private static final String NOTLAR_DOSYA = "notlar.csv";
+    private static final String KULLANICILAR_DOSYA = "kullanicilar.csv";
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     public static void kaydet(List<Urun> urunListesi, List<Satis> satisListesi, List<Not> notListesi) {
@@ -122,6 +123,80 @@ public class VeriDepolama {
             System.err.println("Notlar kaydedilirken hata oluştu: " + e.getMessage());
             e.printStackTrace();
         }
+    }
+
+    public static void kaydetKullanici(String ad, String soyad, String email, String sifre) {
+        try (PrintWriter writer = new PrintWriter(new FileWriter(KULLANICILAR_DOSYA, true))) {
+            // Dosya boşsa başlık satırını ekle
+            if (new File(KULLANICILAR_DOSYA).length() == 0) {
+                writer.println("ad,soyad,email,sifre");
+            }
+            
+            // Yeni kullanıcıyı ekle
+            writer.println(
+                escapeCSV(ad) + "," +
+                escapeCSV(soyad) + "," +
+                escapeCSV(email) + "," +
+                escapeCSV(sifre)
+            );
+            
+            System.out.println("Kullanıcı başarıyla kaydedildi.");
+        } catch (IOException e) {
+            System.err.println("Kullanıcı kaydedilirken hata oluştu: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public static boolean kullaniciVarMi(String email) {
+        File kullanicilarFile = new File(KULLANICILAR_DOSYA);
+        if (!kullanicilarFile.exists()) {
+            return false;
+        }
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(KULLANICILAR_DOSYA))) {
+            String line;
+            boolean isHeader = true;
+            while ((line = reader.readLine()) != null) {
+                if (isHeader) {
+                    isHeader = false;
+                    continue;
+                }
+                String[] parts = parseCSVLine(line);
+                if (parts.length >= 3 && parts[2].equals(email)) {
+                    return true;
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Kullanıcı kontrolü yapılırken hata oluştu: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public static boolean kullaniciDogrula(String email, String sifre) {
+        File kullanicilarFile = new File(KULLANICILAR_DOSYA);
+        if (!kullanicilarFile.exists()) {
+            return false;
+        }
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(KULLANICILAR_DOSYA))) {
+            String line;
+            boolean isHeader = true;
+            while ((line = reader.readLine()) != null) {
+                if (isHeader) {
+                    isHeader = false;
+                    continue;
+                }
+                String[] parts = parseCSVLine(line);
+                if (parts.length >= 4 && parts[2].equals(email) && parts[3].equals(sifre)) {
+                    return true;
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Kullanıcı doğrulama yapılırken hata oluştu: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return false;
     }
 
     // Sayısal değerleri güvenli bir şekilde parse etmek için yardımcı metot

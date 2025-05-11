@@ -25,10 +25,11 @@
 
         <Separator/>
 
-        <TextField fx:id="kullaniciAdiField" promptText="Kullanıcı Adı" prefHeight="40" prefWidth="300"/>
+        <TextField fx:id="kullaniciAdiField" promptText="E-posta" prefHeight="40" prefWidth="300"/>
         <PasswordField fx:id="sifreField" promptText="Şifre" prefHeight="40" prefWidth="300"/>
 
         <Button text="Giriş Yap" onAction="#girisYap" styleClass="login-button" prefWidth="200" prefHeight="40"/>
+        <Button text="Kayıt Ol" onAction="#kayitOl" styleClass="register-button" prefWidth="200" prefHeight="40"/>
 
         <Text fx:id="hataMesaji" styleClass="error-text" fill="red" visible="false"/>
     </VBox>
